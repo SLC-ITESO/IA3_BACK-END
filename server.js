@@ -8,15 +8,20 @@ const cartRoutes = require('./routes/cart-route');
 
 const authMiddleware = require('./middlewares/auth');
 
+function logger (req, res, next){
+    console.log(req)
+    next()
+}
+
 app.use(express.json());
-app.use(authMiddleware);
+
 
 app.get('/', (req, res) => {
     res.send('Integrated Assignment 3. e-commerce app');
 });
 
-app.use('/products', productRoutes);
-app.use('/cart', cartRoutes);
+app.use('/api/products',logger, productRoutes);
+app.use('/api/cart', logger,cartRoutes);
 
 const PORT = 3101;
 app.listen(PORT, () => {
