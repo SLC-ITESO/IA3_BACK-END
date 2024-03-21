@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const prods = require('../data/products.json');
-const {validateHeader, validateAdmin} = require("../middlewares/auth");
+const {validateHeader, validateAdmin, validateBody} = require("../middlewares/auth");
 
-const { nanoid } = require('nanoid');
+const {nanoid} = require('nanoid')
+const fs = require('fs')
 router.get('/', validateHeader, validateAdmin,(req, res) => {
     //returns all products from the ./data/products.json file
     //console.log(prods)
@@ -56,7 +57,7 @@ router.get('/', validateHeader, validateAdmin,(req, res) => {
 
 router.get('/:uid',validateHeader, validateAdmin, (req, res)=>{
     //console.log(typeof (req.params.uid));
-    let prod = prods.find(p=>p.uuid === Number(req.params.uid))
+    let prod = prods.find(p=>p.uuid == req.params.uid)
     if (!prod){
         res.status(404).send({error: "Product not found [INVALID-ID]"})
         return;
@@ -76,6 +77,53 @@ router.get('/:uid',validateHeader, validateAdmin, (req, res)=>{
     res.send(prod)
 })
 
+router.post('/', validateHeader, validateAdmin, validateBody, (req,res) => {
+    if(!req.admin){
+        res.status(401).send({error: "Missing Token"})
+        return
+    }
+    let body = req.body
+    let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
+    let newProd = {
+        uuid: nanoid(4),
+        imageUrl: imageUrl,
+        name: name,
+        description: description,
+        unit: unit,
+        category: category,
+        pricePerUnit: pricePerUnit,
+        stock: stock
+    }
+    prods.push(newProd)
+    fs.writeFileSync('./data/products.json', JSON.stringify(prods))
+    res.status(201).send(newProd)
+    return
 
+})
 
+router.put('/:uid', validateHeader, validateAdmin, validateBody, (req,res)=>{
+
+    let prod = prods.find(p=>p.uuid == req.params.uid)
+    if (!prod){
+        res.status(404).send({error: "Product not found [INVALID-ID]"})
+        return;
+    }
+
+    if(!req.admin){
+        res.status(401).send({error: "Missing Token"})
+        return
+    }
+    let body = req.body
+    let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
+
+    prod.imageUrl = imageUrl
+    prod.name = name
+    prod.description = description
+    prod.unit = unit
+    prod.category = category
+    prod.pricePerUnit = pricePerUnit
+    prod.stock = stock
+    fs.writeFileSync('./data/products.json', JSON.stringify(prods))
+    res.send(prod)
+})
 module.exports = router;

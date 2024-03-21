@@ -32,3 +32,91 @@ GET {{host}}/api/products/2
 x-token: admin2024
 ### GET PRODUCT BY ID (INVALID ID)
 GET {{host}}/api/products/1000
+
+### ----------POST PRODUCTS------------
+
+### ADD A PRODUCT OK (ADMIN)
+
+POST {{host}}/api/products
+Content-Type: application/json
+x-token: admin2024
+
+{
+  "imageUrl": "image url",
+  "name": "product1",
+  "description": "description1",
+  "unit": "unit1",
+  "category": "category1",
+  "pricePerUnit": 12.34,
+  "stock": 10
+}
+
+### ADD A PRODUCT (MISSING PROPERTIES)
+
+POST {{host}}/api/products
+Content-Type: application/json
+x-token: admin2024
+
+{
+  "imageUrl": "image url",
+  "name": "product1"
+}
+### ADD A PRODUCT (ADMIN) (REPEATED NAME)
+
+POST {{host}}/api/products
+Content-Type: application/json
+x-token: admin2024
+
+{
+  "imageUrl": "image",
+  "name": "product1",
+  "description": "desc1",
+  "unit": "u",
+  "category": "cat",
+  "pricePerUnit": 12.34,
+  "stock": 10
+}
+
+### ADD A PRODUCT (MISSING X-TOKEN)
+
+POST {{host}}/api/products
+Content-Type: application/json
+
+{
+  "imageUrl": "image",
+  "name": "product1",
+  "description": "desc1",
+  "unit": "u",
+  "category": "cat",
+  "pricePerUnit": 12.34,
+  "stock": 10
+}
+
+
+### ADD A PRODUCT (X-TOKEN NOT ADMIN)
+
+POST {{host}}/api/products
+Content-Type: application/json
+x-token: admin2020
+
+{
+  "imageUrl": "image",
+  "name": "product1",
+  "description": "desc1",
+  "unit": "u",
+  "category": "cat",
+  "pricePerUnit": 12.34,
+  "stock": 10
+}
+
+### ----------PUT PRODUCTS------------
+
+### UPDATE PRODUCT OK (ADMIN)
+
+### UPDATE PRODUCT (MISSING PROPERTIES)
+
+### UPDATE PRODUCT (ADMIN) (REPEATED NAME)
+
+### UPDATE PRODUCT (MISSING X-TOKEN)
+
+### UPDATE PRODUCT (X-TOKEN NOT ADMIN)
