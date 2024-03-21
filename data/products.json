@@ -1,6 +1,6 @@
 [
   {
-    "uuid": "0001",
+    "uuid": 1,
     "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/640px-Banana-Single.jpg",
     "name": "Banana",
     "description": "Yellow, smooth",
@@ -10,7 +10,7 @@
     "stock": 100
   },
   {
-    "uuid": "0002",
+    "uuid": 2,
     "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Strawberry_gariguette_DSC03063.JPG/220px-Strawberry_gariguette_DSC03063.JPG",
     "name": "Strawberry",
     "description": "red, sweet",
@@ -20,7 +20,7 @@
     "stock": 50
   },
   {
-    "uuid": "0003",
+    "uuid": 3,
     "imageUrl": "https://target.scene7.com/is/image/Target/GUEST_3e3023d6-31c9-4a50-8d1e-a5a5719448ae?wid=488&hei=488&fmt=pjpeg",
     "name": "Lime",
     "description": "green, sour",

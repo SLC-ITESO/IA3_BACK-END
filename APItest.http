@@ -1,0 +1,34 @@
+@host = http://localhost:3101
+
+
+### ----------GET PRODUCTS------------
+
+
+### ALL PRODUCTS FOR NON-ADMIN
+
+GET {{host}}/api/products
+
+### RETURN ALL PRODUCT ATTRIBUTES (ALSO STOCK)
+
+GET {{host}}/api/products/
+x-token: admin2024
+
+### FILTER BY NAME AND CATEGORY FOR NON-ADMIN
+
+GET {{host}}/api/products?name=a&category=b
+
+### FILTER BY PRICE RANGE FOR NON-ADMIN
+
+GET {{host}}/api/products?min=30&max=50
+
+
+### ----------GET PRODUCTS BY ID------------
+
+### GET PRODUCT BY ID (VALID ID AND NON-ADMIN)
+GET {{host}}/api/products/2
+
+### GET PRODUCT BY ID (VALID ID) (ADMIN)
+GET {{host}}/api/products/2
+x-token: admin2024
+### GET PRODUCT BY ID (INVALID ID)
+GET {{host}}/api/products/1000
