@@ -126,4 +126,23 @@ router.put('/:uid', validateHeader, validateAdmin, validateBody, (req,res)=>{
     fs.writeFileSync('./data/products.json', JSON.stringify(prods))
     res.send(prod)
 })
+
+router.delete('/:uid', validateHeader, validateAdmin, (req,res)=>{
+    if(!req.admin){
+        res.status(401).send({error: "Missing Token"})
+        return
+    }
+
+    let prod = prods.find(p=>p.uuid == req.params.uid)
+    if (!prod){
+        res.status(404).send({error: "Product not found [INVALID-ID]"})
+        return;
+    }
+
+    let index = prods.indexOf(prod)
+    prods.splice(index, 1)
+    fs.writeFileSync('./data/products.json', JSON.stringify(prods))
+    res.status(200).send(prod)
+})
+
 module.exports = router;

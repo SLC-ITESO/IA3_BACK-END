@@ -180,3 +180,18 @@ x-token: admin2020
   "pricePerUnit": 100000.00,
   "stock": 1
 }
+### ----------DELETE PRODUCTS------------
+
+### DELETE PRODUCT OK (ADMIN)
+
+DELETE {{host}}/api/products/Nzpt
+x-token: admin2024
+
+### DELETE PRODUCT (MISSING X-TOKEN)
+
+DELETE {{host}}/api/products/Nzpt
+
+### DELETE PRODUCT (X-TOKEN NOT ADMIN)
+
+DELETE {{host}}/api/products/Nzpt
+x-token: admin2020
