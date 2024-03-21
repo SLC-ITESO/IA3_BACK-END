@@ -113,10 +113,70 @@ x-token: admin2020
 
 ### UPDATE PRODUCT OK (ADMIN)
 
-### UPDATE PRODUCT (MISSING PROPERTIES)
+PUT {{host}}/api/products/Nzpt
+Content-Type: application/json
+x-token: admin2024
 
+{
+  "imageUrl": "NEW BETTER IMAGE!!!",
+  "name": "flashy name",
+  "description": "cool desc",
+  "unit": "tons",
+  "category": "dark matter",
+  "pricePerUnit": 100000.00,
+  "stock": 1
+}
+### UPDATE PRODUCT (MISSING PROPERTIES)
+PUT {{host}}/api/products/Nzpt
+Content-Type: application/json
+x-token: admin2024
+
+{
+  "description": "cool desc",
+  "unit": "tons",
+  "category": "dark matter",
+  "pricePerUnit": 100000.00,
+  "stock": 1
+}
 ### UPDATE PRODUCT (ADMIN) (REPEATED NAME)
+PUT {{host}}/api/products/Nzpt
+Content-Type: application/json
+x-token: admin2024
+
+{
+  "imageUrl": "NEW BETTER IMAGE!!!",
+  "name": "flashy name",
+  "description": "cool desc",
+  "unit": "tons",
+  "category": "dark matter",
+  "pricePerUnit": 100000.00,
+  "stock": 1
+}
 
 ### UPDATE PRODUCT (MISSING X-TOKEN)
+PUT {{host}}/api/products/Nzpt
+Content-Type: application/json
 
+{
+  "imageUrl": "NEW BETTER IMAGE!!!",
+  "name": "flashy name",
+  "description": "cool desc",
+  "unit": "tons",
+  "category": "dark matter",
+  "pricePerUnit": 100000.00,
+  "stock": 1
+}
 ### UPDATE PRODUCT (X-TOKEN NOT ADMIN)
+PUT {{host}}/api/products/Nzpt
+Content-Type: application/json
+x-token: admin2020
+
+{
+  "imageUrl": "NEW BETTER IMAGE!!!",
+  "name": "flashy name",
+  "description": "cool desc",
+  "unit": "tons",
+  "category": "dark matter",
+  "pricePerUnit": 100000.00,
+  "stock": 1
+}
