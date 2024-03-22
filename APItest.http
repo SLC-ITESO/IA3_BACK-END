@@ -195,3 +195,71 @@ DELETE {{host}}/api/products/Nzpt
 
 DELETE {{host}}/api/products/Nzpt
 x-token: admin2020
+
+### ----------POST CART------------
+
+### ADD TO CART (VALID)
+POST {{host}}/api/cart
+content-type: application/json
+x-user: Chocolate
+
+[
+  {
+    "uuid": "1",
+    "amount": 3
+  },
+  {
+    "uuid": "3",
+    "amount": 2
+  }
+]
+
+### ADD TO CART (MISSING X-USER)
+POST {{host}}/api/cart
+content-type: application/json
+
+[
+  {
+    "uuid": "1",
+    "amount": 3
+  }
+]
+### ADD TO CART (EXISTENT USER)
+POST {{host}}/api/cart
+content-type: application/json
+x-user: Chocolate
+
+[
+  {
+    "uuid": "123",
+    "amount": 5
+  }
+]
+### ADD TO CART (INVALID AMOUNT)
+POST {{host}}/api/cart
+content-type: application/json
+x-user: Chocolate
+
+[
+  {
+    "uuid": "1",
+    "amount": -1
+  }
+]
+### ADD TO CART (INSUFFICIENT STOCK)
+
+### ----------GET CART------------
+
+### GET CART (VALID)
+
+### GET CART WITH INSUFFICIENT STOCK
+    ### MODIFY STOCK OF PRODUCT
+
+    ### GET CART
+
+### GET CART WITH 0 STOCK
+    ### MODIFY STOCK OF PRODUCT
+
+    ### GET CART
+
+### GET CART (MISSING X-USER)

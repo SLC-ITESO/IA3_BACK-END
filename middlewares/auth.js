@@ -44,9 +44,9 @@ function validateBody(req, res, next){
     console.log(body)
     //orders the body
     let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
-    console.log(imageUrl, name, description, unit, category, pricePerUnit, stock)
+    //console.log(imageUrl, name, description, unit, category, pricePerUnit, stock)
     //typeof
-    console.log(typeof(imageUrl), typeof(name), typeof(description), typeof(unit), typeof(category), typeof(pricePerUnit), typeof(stock))
+    //console.log(typeof(imageUrl), typeof(name), typeof(description), typeof(unit), typeof(category), typeof(pricePerUnit), typeof(stock))
     let error = ''
     if(imageUrl == undefined || !imageUrl.trim()){
         error += 'imageUrl is invalid; '
@@ -90,4 +90,43 @@ function validateBody(req, res, next){
     next()
 }
 
-module.exports = {validateHeader, validateAdmin, validateBody}
+function validateUserHeader(req, res, next){
+    let header = req.get('x-user')
+    console.log(header)
+    if(!header){
+        res.status(403).send({error: "No User specified"})
+        return;
+    }
+    else {
+        req.user = header
+        next()
+    }
+}
+
+function amntInStock(uuid, amount){
+    let prod = prods.find(p => p.uuid == uuid)
+    return !(amount > prod.stock || prod.stock < 0);
+
+}
+
+function checkUUID(uuid) {
+    let prod = prods.find(p => p.uuid == uuid)
+    return !!prod;
+
+}
+function  validateUserCart(req, res, next){
+    let cart = req.body
+    let error = ''
+    cart.forEach(c => {
+        console.log(c, typeof(c.amount), c.amount > 0)
+        if(c.uuid === undefined || !c.uuid.trim() || !checkUUID(c.uuid)){
+            error += 'Invalid uuid; '
+        }
+        if(isNaN(c.amount) || c.amount < 0 || amntInStock(c.uuid, c.amount) === false){
+            error += 'Invalid amount; '
+        }
+    })
+    next()
+}
+
+module.exports = {validateHeader, validateAdmin, validateBody, validateUserHeader, validateUserCart};
