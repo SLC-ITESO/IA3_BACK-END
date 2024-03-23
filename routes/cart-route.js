@@ -4,8 +4,44 @@ const prods = require('../data/products.json');
 const {validateHeader, validateAdminder, validateBody, validateUserHeader, validateUserCart} = require("../middlewares/auth");
 const fs = require('fs')
 
-router.get('/', (req, res) => {
-    res.send(cart);
+router.get('/', validateUserHeader, (req, res) => {
+    /*
+
+    Search in the cart for the specified user.
+    For each ID, search in the list of products and add the product details (except stock).
+    Calculate the total price.
+    If a product no longer exists or stock is 0, skip it and do not add it to the response.
+    If the stock is less than the amount requested, return the available stock.
+    Return something like JSON
+
+     */
+    let user = req.user
+    let cartUser = cart.find(c => c.user == user)
+    if(!cartUser){
+        res.send([])
+        return;
+    }
+    let cartProds = cartUser.cart
+    let total = 0
+    let cartDeets = []
+    cartProds.forEach(c => {
+        let prod = prods.find(p => p.uuid == c.uuid)
+        if(prod && prod.stock > 0 && c.amount <= prod.stock){
+            let price = prod.pricePerUnit * c.amount
+            total += price
+            cartDeets.push({
+                uuid: c.uuid,
+                name: prod.name,
+                description: prod.description,
+                unit: prod.unit,
+                category: prod.category,
+                pricePerUnit: prod.pricePerUnit,
+                amount: c.amount,
+                price
+            })
+        }
+    })
+    res.send({cart: cartDeets, total})
 });
 router.post('/', validateUserHeader, (req, res) => {
     let user = req.user
@@ -16,11 +52,11 @@ router.post('/', validateUserHeader, (req, res) => {
         if(c.uuid === undefined || !c.uuid.trim()){
             error += 'Invalid uuid; '
         }
-        //checks if the uuid exists
+
         let prod = prods.find(p => p.uuid == c.uuid)
         console.log(prod)
         if(!prod){
-            error += 'Invalid uuid; '
+            error += 'Invalid uuid; Product: "'+c.uuid+'" not found; '
             res.status(400).send({error})
         }
         if(isNaN(c.amount) || c.amount < 0){
@@ -45,8 +81,10 @@ router.post('/', validateUserHeader, (req, res) => {
             //checks if the product is already in the cart, if so, it will add the amount
             cart.forEach(c => {
                 let prod = cartUser.cart.find(p => p.uuid == c.uuid)
+                let prods2 = prods.find(p => p.uuid == c.uuid)
                 if(prod){
-                    if(c.amount > prod.stock || (c.amount + prod.amount) > prod.stock){
+                    console.log("prod", prods)
+                    if(c.amount > prod.stock || (c.amount + prod.amount) > prods2.stock){
                         res.status(400).send({error: 'Amount exceeds stock'})
                         return;
                     }
