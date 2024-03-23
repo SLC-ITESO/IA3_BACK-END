@@ -5,10 +5,7 @@ const {validateHeader, validateAdmin, validateBody} = require("../middlewares/au
 const {nanoid} = require('nanoid')
 const fs = require('fs')
 router.get('/', validateHeader, validateAdmin,(req, res) => {
-    //returns all products from the ./data/products.json file
-    //console.log(prods)
-    //checks if its admin, if not, it will not show the stock,
-    console.log(res.query)
+    //console.log(res.query)
     let {name, category, pricePerUnit, stock, min,max} = req.query;
     let filtProds = prods.slice();
 
@@ -59,10 +56,10 @@ router.get('/:uid',validateHeader, validateAdmin, (req, res)=>{
     //console.log(typeof (req.params.uid));
     let prod = prods.find(p=>p.uuid == req.params.uid)
     if (!prod){
-        res.status(404).send({error: "Product not found [INVALID-ID]"})
+        res.status(404).send({error: "Bad ID"})
         return;
     }
-    console.log(typeof (prod))
+    //console.log(typeof (prod))
     if(!req.admin){
         prod = {
             id: prod.id,
@@ -84,6 +81,7 @@ router.post('/', validateHeader, validateAdmin, validateBody, (req,res) => {
     }
     let body = req.body
     let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
+
     let newProd = {
         uuid: nanoid(4),
         imageUrl: imageUrl,
@@ -94,18 +92,18 @@ router.post('/', validateHeader, validateAdmin, validateBody, (req,res) => {
         pricePerUnit: pricePerUnit,
         stock: stock
     }
+
     prods.push(newProd)
+
     fs.writeFileSync('./data/products.json', JSON.stringify(prods))
     res.status(201).send(newProd)
-    return
-
 })
 
 router.put('/:uid', validateHeader, validateAdmin, validateBody, (req,res)=>{
 
     let prod = prods.find(p=>p.uuid == req.params.uid)
     if (!prod){
-        res.status(404).send({error: "Product not found [INVALID-ID]"})
+        res.status(404).send({error: "Bad ID"})
         return;
     }
 
@@ -113,6 +111,7 @@ router.put('/:uid', validateHeader, validateAdmin, validateBody, (req,res)=>{
         res.status(401).send({error: "Missing Token"})
         return
     }
+
     let body = req.body
     let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
 
@@ -123,6 +122,7 @@ router.put('/:uid', validateHeader, validateAdmin, validateBody, (req,res)=>{
     prod.category = category
     prod.pricePerUnit = pricePerUnit
     prod.stock = stock
+
     fs.writeFileSync('./data/products.json', JSON.stringify(prods))
     res.send(prod)
 })
@@ -135,12 +135,13 @@ router.delete('/:uid', validateHeader, validateAdmin, (req,res)=>{
 
     let prod = prods.find(p=>p.uuid == req.params.uid)
     if (!prod){
-        res.status(404).send({error: "Product not found [INVALID-ID]"})
+        res.status(404).send({error: "Bad ID"})
         return;
     }
 
     let index = prods.indexOf(prod)
     prods.splice(index, 1)
+
     fs.writeFileSync('./data/products.json', JSON.stringify(prods))
     res.status(200).send(prod)
 })

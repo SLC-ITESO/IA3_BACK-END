@@ -1,7 +1,7 @@
 const prods = require('../data/products.json');
 function validateHeader(req, res, next){
     let header = req.get('x-token')
-    console.log(header)
+    //console.log(header)
     if(!header){
         //res.status(403).send({error: "No token"})
         req.token = header
@@ -16,18 +16,16 @@ function validateHeader(req, res, next){
 function validateAdmin(req, res, next){
     let pass = "admin2024"
     req.admin = false
+
     if(req.token === pass){
         req.admin = true
         next()
-        return;
     }
     else if(req.token === undefined){
         next()
-        return;
     }
     else if(req.token !== pass) {
         res.status(403).send({error: "Bad Token"})
-        return;
     }
 }
 
@@ -40,8 +38,7 @@ function validateBody(req, res, next){
         res.status(403).send({error: "No token"})
         return;
     }
-    //Verifies all components of the body
-    console.log(body)
+    //console.log(body)
     //orders the body
     let {imageUrl, name, description, unit, category, pricePerUnit, stock} = body
     //console.log(imageUrl, name, description, unit, category, pricePerUnit, stock)
@@ -92,10 +89,10 @@ function validateBody(req, res, next){
 
 function validateUserHeader(req, res, next){
     let header = req.get('x-user')
-    console.log(header)
+    //console.log(header)
+
     if(!header){
         res.status(403).send({error: "No User specified"})
-        return;
     }
     else {
         req.user = header

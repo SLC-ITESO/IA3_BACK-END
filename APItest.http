@@ -19,17 +19,18 @@ GET {{host}}/api/products?name=a&category=b
 
 ### FILTER BY PRICE RANGE FOR NON-ADMIN
 
-GET {{host}}/api/products?min=0&max=10
+GET {{host}}/api/products?min=20&max=70
 
 
 ### ----------GET PRODUCTS BY ID------------
 
 ### GET PRODUCT BY ID (VALID ID AND NON-ADMIN)
-GET {{host}}/api/products/3
+GET {{host}}/api/products/1
 
 ### GET PRODUCT BY ID (VALID ID) (ADMIN)
-GET {{host}}/api/products/2
+GET {{host}}/api/products/3
 x-token: admin2024
+
 ### GET PRODUCT BY ID (INVALID ID)
 GET {{host}}/api/products/1000
 
@@ -113,7 +114,7 @@ x-token: admin2020
 
 ### UPDATE PRODUCT OK (ADMIN)
 
-PUT {{host}}/api/products/4MlQ
+PUT {{host}}/api/products/13oW
 Content-Type: application/json
 x-token: admin2024
 
@@ -184,7 +185,7 @@ x-token: admin2020
 
 ### DELETE PRODUCT OK (ADMIN)
 
-DELETE {{host}}/api/products/4MlQ
+DELETE {{host}}/api/products/13oW
 x-token: admin2024
 
 ### DELETE PRODUCT (MISSING X-TOKEN)
@@ -201,16 +202,16 @@ x-token: admin2020
 ### ADD TO CART (VALID)
 POST {{host}}/api/cart
 content-type: application/json
-x-user: Treant
+x-user: Chocolate
 
 [
   {
     "uuid": "3",
-    "amount": 10
+    "amount": 1
   },
   {
     "uuid": "2",
-    "amount": 2
+    "amount": 9
   }
 ]
 
@@ -231,8 +232,8 @@ x-user: Chocolate
 
 [
   {
-    "uuid": "3",
-    "amount": 5
+    "uuid": "2",
+    "amount": 1
   }
 ]
 ### ADD TO CART (INVALID AMOUNT)
@@ -249,7 +250,7 @@ x-user: Chocolate
 ### ADD TO CART (INSUFFICIENT STOCK)
 POST {{host}}/api/cart
 content-type: application/json
-x-user: Chocolate
+x-user: Treant
 
 [
   {
@@ -268,14 +269,14 @@ x-user: Chocolate
 
     ### GET CART
 GET {{host}}/api/cart
-x-user: Eddie
+x-user: Treant
 
 ### GET CART WITH 0 STOCK
     ### MODIFY STOCK OF PRODUCT
 
     ### GET CART
 GET {{host}}/api/cart
-x-user: Eddie
+x-user: Treant
 
 ### GET CART (MISSING X-USER)
 GET {{host}}/api/cart
