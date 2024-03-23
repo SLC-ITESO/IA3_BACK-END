@@ -201,15 +201,15 @@ x-token: admin2020
 ### ADD TO CART (VALID)
 POST {{host}}/api/cart
 content-type: application/json
-x-user: Chocolate
+x-user: Eddie
 
 [
   {
     "uuid": "1",
-    "amount": 3
+    "amount": 10
   },
   {
-    "uuid": "3",
+    "uuid": "2",
     "amount": 2
   }
 ]
@@ -231,7 +231,7 @@ x-user: Chocolate
 
 [
   {
-    "uuid": "123",
+    "uuid": "3",
     "amount": 5
   }
 ]
@@ -247,7 +247,16 @@ x-user: Chocolate
   }
 ]
 ### ADD TO CART (INSUFFICIENT STOCK)
+POST {{host}}/api/cart
+content-type: application/json
+x-user: Chocolate
 
+[
+  {
+    "uuid": "1",
+    "amount": 101
+  }
+]
 ### ----------GET CART------------
 
 ### GET CART (VALID)

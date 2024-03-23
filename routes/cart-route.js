@@ -18,6 +18,7 @@ router.post('/', validateUserHeader, (req, res) => {
         }
         //checks if the uuid exists
         let prod = prods.find(p => p.uuid == c.uuid)
+        console.log(prod)
         if(!prod){
             error += 'Invalid uuid; '
             res.status(400).send({error})
@@ -27,7 +28,7 @@ router.post('/', validateUserHeader, (req, res) => {
         }
         //checks if the amount exceeds the stock
         if(c.amount > prod.stock || prod.stock < 0){
-            error += 'Invalid amount; '
+            error += 'Invalid amount - EXCEEDS STOCK; '
         }
 
     })
@@ -41,7 +42,20 @@ router.post('/', validateUserHeader, (req, res) => {
     let cartUser = cartFile.find(c => c.user == user)
     if(cartUser){
         if(cartUser.cart){
-            cartUser.cart = cartUser.cart.concat(cart)
+            //checks if the product is already in the cart, if so, it will add the amount
+            cart.forEach(c => {
+                let prod = cartUser.cart.find(p => p.uuid == c.uuid)
+                if(prod){
+                    if(c.amount > prod.stock || (c.amount + prod.amount) > prod.stock){
+                        res.status(400).send({error: 'Amount exceeds stock'})
+                        return;
+                    }
+                    prod.amount += c.amount
+                }
+                else {
+                    cartUser.cart.push(c)
+                }
+            })
         }
         else {
             cartUser.cart = cart
@@ -53,4 +67,6 @@ router.post('/', validateUserHeader, (req, res) => {
     fs.writeFileSync('./data/cart.json', JSON.stringify(cartFile))
     res.send(cartFile)
 });
+
+
 module.exports = router;
